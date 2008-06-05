@@ -49,7 +49,8 @@ lpc.obj <- LPC(x,y, type="regression")
 # Look at plot of Predictive Advantage
 pred.adv <- PredictiveAdvantage(x,y,type="regression",soft.thresh=lpc.obj$soft.thresh)
 # Estimate FDRs for LPC and T scores
-fdr.lpc.out <- EstimateLPCFDR(x,y,type="regression",soft.thresh=lpc.obj$soft.thresh,nreps=50)
+fdr.lpc.out <- EstimateLPCFDR(x,y,type="regression",
+soft.thresh=lpc.obj$soft.thresh,nreps=50)
 # Estimate FDRs for T scores only. This is quicker than computing FDRs
 #    for LPC scores, and should be used when only T FDRs are needed. If we
 #    started with the same random seed, then EstimateTFDR and EstimateLPCFDR
@@ -89,11 +90,11 @@ x[1:25,y<9.5] <- x[1:25,y<9.5]+ 1.5
 x[26:50,y<10] <- x[26:50,y<10] - 1.5
 lpc.obj <- LPC(x,y, type="survival", censoring.status=cens)
 # Look at plot of Predictive Advantage
-pred.adv <- PredictiveAdvantage(x,y,type="survival",soft.thresh=lpc.obj$soft.thresh,
-censoring.status=cens)
+pred.adv <- PredictiveAdvantage(x,y,type="survival",
+soft.thresh=lpc.obj$soft.thresh, censoring.status=cens)
 # Estimate FDRs for LPC scores and T scores
-fdr.lpc.out <- EstimateLPCFDR(x,y,
-type="survival",soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
+fdr.lpc.out <- EstimateLPCFDR(x,y,type="survival",
+soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
 # Estimate FDRs for T scores only. This is quicker than computing FDRs
 #    for LPC scores, and should be used when only T FDRs are needed. If we
 #    started with the same random seed, then EstimateTFDR and EstimateLPCFDR

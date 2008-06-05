@@ -17,6 +17,8 @@ EstimateLPCFDR <- function(x,y, type, nreps=100,soft.thresh=NULL,censoring.statu
     for(i in 1:100) ttstars <- c(ttstars, quantitative.func(dat$x, sample(dat$y), .05)$tt)
   } else if (type=="two class") {
     for(i in 1:100) ttstars <- c(ttstars, ttest.func(dat$x, sample(dat$y), .05)$tt)
+  } else if (type=="multiclass"){
+    for(i in 1:100) ttstars <- c(ttstars, multiclass.func(dat$x, sample(dat$y), .05)$tt)
   } else if (type=="survival") {
     for(i in 1:100){
       oo <- sample(ncol(dat$x))
@@ -27,6 +29,7 @@ EstimateLPCFDR <- function(x,y, type, nreps=100,soft.thresh=NULL,censoring.statu
   if(type=="regression") tt.tots <- quantitative.func(dat$x, dat$y, .05)$tt
   if(type=="two class") tt.tots <- ttest.func(dat$x, dat$y, .05)$tt
   if(type=="survival") tt.tots <- cox.func(dat$x, dat$y, dat$censoring.status, .05)$tt
+  if(type=="multiclass") tt.tots <- multiclass.func(dat$x, dat$y, .05)$tt
   p3 <- mean(abs(tt.tots))
   for(i in 1:nreps){
     cat(i,fill=F)
@@ -42,7 +45,10 @@ EstimateLPCFDR <- function(x,y, type, nreps=100,soft.thresh=NULL,censoring.statu
     } else if (type=="survival"){
       tt.test <- cox.func(test$x, test$y, test$censoring.status, .05)$tt
       tt.train <- cox.func(train$x, train$y, train$censoring.status, .05)$tt
-    }  
+    }  else if (type=="multiclass"){
+      tt.test <- multiclass.func(test$x, test$y, .05)$tt
+      tt.train <- multiclass.func(train$x, train$y, .05)$tt
+    }
     lpc.train <- LPC(train$x, train$y, type=type, soft.thresh=soft.thresh,censoring.status=train$censoring.status)$lpcscores
     p1s.tmp <- NULL
     p2s.tmp <- NULL

@@ -27,9 +27,10 @@ NULL, censoring.status = NULL)
             elements are 1 or 2. For quantitative outcome, y's elements
             are
             real-valued. For survival
-                data, y indicates the survival time, and must be positive.}   
+                data, y indicates the survival time, and must be
+                positive., For multiclass outcome, y must be coded as 1,2,3,...}   
   \item{type}{One of "regression" (for a quantitative outcome), "two
-    class", or "survival".}
+    class", "multiclass", or "survival".}
   \item{soft.thresh}{The value of the soft threshold to be used in the
     L1 regression of the scores onto the eigenarrays. If NULL, then it
     will be chosen adaptively.}
@@ -135,7 +136,8 @@ PredictiveAdvantage(x,y,type="survival",soft.thresh=lpc.obj$soft.thresh,
 censoring.status=cens)
 # Estimate FDRs for LPC scores and T scores
 fdr.lpc.out <-
-EstimateLPCFDR(x,y, type="survival",soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
+EstimateLPCFDR(x,y, type="survival",soft.thresh=lpc.obj$soft.thresh,
+nreps=20,censoring.status=cens)
 # Estimate FDRs for T scores only. This is quicker than computing FDRs
 #    for LPC scores, and should be used when only T FDRs are needed. If we
 #    started with the same random seed, then EstimateTFDR and EstimateLPCFDR
@@ -156,6 +158,46 @@ PrintGeneList(lpc.obj,numGenes=20)
 #    LPC and T scores and their FDRs for LPC and T.
 PrintGeneList(lpc.obj,numGenes=20,lpcfdr.out=fdr.lpc.out)
 
+
+# Now, repeating everything that we did before, but using a
+#   **multiclass** outcome
+
+set.seed(2)
+n <- 40 # 40 samples
+p <- 1000 # 1000 genes
+x <- matrix(rnorm(n*p), nrow=p) # make 40x1000 gene expression matrix
+y <-  sample(1:4, n, rep=TRUE)
+# make first 50 genes differentially-expressed
+x[1:50,y==1] <- x[1:50,y==1] + 1.5
+x[1:25,y==2] <- x[1:25,y==2] + 1
+x[1:50,y==3] <- x[1:50,y==3] - 1
+lpc.obj <- LPC(x,y, type="multiclass")
+# Look at plot of Predictive Advantage
+pred.adv <-
+PredictiveAdvantage(x,y,type="multiclass",soft.thresh=lpc.obj$soft.thresh)
+# Estimate FDRs for LPC scores and T scores
+fdr.lpc.out <-
+EstimateLPCFDR(x,y, type="multiclass",soft.thresh=lpc.obj$soft.thresh,
+nreps=20)
+# Estimate FDRs for T scores only. This is quicker than computing FDRs
+#    for LPC scores, and should be used when only T FDRs are needed. If we
+#    started with the same random seed, then EstimateTFDR and EstimateLPCFDR
+#    would give same T FDRs.
+fdr.t.out <- EstimateTFDR(x,y, type="multiclass")
+# print out results of main function
+lpc.obj
+# print out info about T FDRs
+fdr.t.out
+# print out info about LPC FDRs
+fdr.lpc.out
+# Compare FDRs for T and LPC scores on 10\% of genes. 
+PlotFDRs(fdr.lpc.out,frac=.1)
+# Print out names of 20 genes with highest LPC scores, along with their
+#    LPC and T scores.
+PrintGeneList(lpc.obj,numGenes=20)
+# Print out names of 20 genes with highest LPC scores, along with their
+#    LPC and T scores and their FDRs for LPC and T.
+PrintGeneList(lpc.obj,numGenes=20,lpcfdr.out=fdr.lpc.out)
 
 
 

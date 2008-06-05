@@ -7,8 +7,10 @@ PredictiveModel <- function(dat, scores, thresh, type="regression"){
     p <- abs(quantitative.func(dat$x[1:thresh,], dat$y, .05)$tt)
   }else if (type=="two class"){
     p <- abs(ttest.func(dat$x[1:thresh,], dat$y, .05)$tt)
+  } else if (type=="multiclass"){
+    p <- abs(multiclass.func(dat$x[1:thresh,], dat$y, .05)$tt)
   }
-    pmeans <- NULL
+  pmeans <- NULL
   for(i in 1:length(p)) pmeans <- c(pmeans, mean(p[1:i]))
   return(pmeans)
 }

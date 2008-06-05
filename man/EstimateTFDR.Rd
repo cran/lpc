@@ -21,9 +21,10 @@ EstimateTFDR(x,y, type,censoring.status=NULL)
   \item{y}{A vector of length n, with an outcome for each observation. For two-class
    outcome, y's elements are 1 or 2. For quantitative outcome, y's
    elements are real-valued. For survival
-  data, y indicates the survival time.}    
+  data, y indicates the survival time. For a multiclass outcome, y is
+  coded as 1,2,3,...}    
   \item{type}{One of "regression" (for a quantitative outcome), "two
-    class", "survival", or "multi" (for a multiple-class outcome).}
+    class", "survival", or "multiclass" (for a multiple-class outcome).}
   \item{censoring.status}{For survival outcome only, a vector of
       length
       n which takes on values 0 or 1
@@ -43,9 +44,13 @@ et al (2001) and Storey & Tibshirani (2003).
   \item{call}{The function call made.}
 }
 \references{
+Storey, J.D. and Tibshirani, R. (2003) Statistical significance for
+genomewide studies. Proceedings of the National Academy of
+Sciences. 100(16): 9440-9445.
+
 Tusher, V.G. and Tibshirani, R. and Chu, G. (2001) Significance analysis
 of microarrays applied to the ionizing radiation response. Proceedings
-of the National Academy of Sciences. 98(9): 5116-5121.\\
+of the National Academy of Sciences. 98(9): 5116-5121.
 
   Witten, D.M. and Tibshirani, R. (2008) Testing significance
   of features by lassoed principal components. Annals of Applied
@@ -113,7 +118,8 @@ PredictiveAdvantage(x,y,type="survival",soft.thresh=lpc.obj$soft.thresh,
 censoring.status=cens)
 # Estimate FDRs for LPC scores and T scores
 fdr.lpc.out <- EstimateLPCFDR(x,y,
-type="survival",soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
+type="survival",soft.thresh=lpc.obj$soft.thresh,
+nreps=20,censoring.status=cens)
 # Estimate FDRs for T scores only. This is quicker than computing FDRs
 #    for LPC scores, and should be used when only T FDRs are needed. If we
 #    started with the same random seed, then EstimateTFDR and EstimateLPCFDR

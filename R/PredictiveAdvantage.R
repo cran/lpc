@@ -10,6 +10,7 @@ PredictiveAdvantage <- function(x,y,type,nreps=20,ngenes=100,soft.thresh=NULL,ce
     if(type=="regression")  sam.output <- quantitative.func(dat.train$x, dat.train$y, .05)
     if(type=="survival") sam.output <- cox.func(dat.train$x, dat.train$y, dat.train$censoring.status, .05)
     if(type=="two class") sam.output <- ttest.func(dat.train$x, dat.train$y, .05)
+    if(type=="multiclass") sam.output <- multiclass.func(dat.train$x, dat.train$y, .05)
     sam <- sam.output$tt
     lassoauto <- LPC(dat.train$x, dat.train$y, type=type,censoring.status=dat.train$censoring.status,soft.thresh=soft.thresh)$lpcscores
     lassoauto.out <- cbind(lassoauto.out, PredictiveModel(dat.test, lassoauto, ngenes, type=type))

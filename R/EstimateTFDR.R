@@ -6,6 +6,9 @@ EstimateTFDR <- function(x,y,type,censoring.status=NULL){
   if(type=="regression"){
     tt <- quantitative.func(dat$x, dat$y, .05)$tt
     for (i in 1:100) ttstar <- c(ttstar, quantitative.func(dat$x, sample(dat$y), .05)$tt)
+  } else if (type=="multiclass"){
+    tt <- multiclass.func(dat$x, dat$y, .05)$tt
+    for(i in 1:100) ttstar <- c(ttstar, multiclass.func(dat$x, sample(dat$y), .05)$tt)
   } else if(type=="two class"){
     tt <- ttest.func(dat$x, dat$y, .05)$tt
     for (i in 1:100) ttstar <- c(ttstar, ttest.func(dat$x, sample(dat$y), .05)$tt)

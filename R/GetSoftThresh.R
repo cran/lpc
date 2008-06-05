@@ -16,6 +16,9 @@ GetSoftThresh <- function(data, u, type, upperbd=200){
     } else if (type=="two class"){
       t.train <- ttest.func(train$x, train$y, .05)$tt
       t.test <- ttest.func(test$x, test$y, .05)$tt
+    } else if (type=="multiclass"){
+      t.train <- multiclass.func(train$x, train$y, .05)$tt
+      t.test <- multiclass.func(test$x, test$y, .05)$tt
     }
     coefs <- lm((t.train-mean(t.train))~u+0)$coef
     for(st in 1:length(softthreshrange)){

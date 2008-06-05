@@ -9,7 +9,8 @@ curves. If the red curve is higher than the black curve on average, then
 LPC should be used instead of T on this data set. 
 }
 \usage{
-PredictiveAdvantage(x,y,type,nreps=20,ngenes=100,soft.thresh=NULL,censoring.status=NULL)
+PredictiveAdvantage(x,y,type,nreps=20,ngenes=100,
+soft.thresh=NULL,censoring.status=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,9 +22,10 @@ PredictiveAdvantage(x,y,type,nreps=20,ngenes=100,soft.thresh=NULL,censoring.stat
             elements are 1 or 2. For quantitative outcome, y's elements
             are
             real-valued. For survival
-            data, y indicates the survival time.}
+            data, y indicates the survival time. For multiclass outcome,
+          y is coded as 1,2,3,..}
   \item{type}{One of "regression" (for a quantitative outcome), "two
-    class", or "survival".}
+    class", "multiclass", or "survival".}
     \item{nreps}{Number of training/test set splits used in computing
       predictive advantage.}
     \item{soft.thresh}{Value of soft threshold used in L1 constraint for
@@ -46,7 +48,7 @@ samples). Then, the following is computed: $E(|T_test| | |L_train|>alpha(L_train
 E(|T_test| | |T_train|>alpha(T_train))$, where $T_test$ are the T scores on
 the test data, $T_train$ are the T scores on the training data, and
 $L_train$ are the LPC scores on the training data. $alpha(L_train)$ and
-$alpha(T_train)$ are the alpha quantiles of the LPC and T scores on the training data. A
+$alpha(T_train)$ are the $alpha$ quantiles of the LPC and T scores on the training data. A
 large value of $E(|T_test| | |L_train|>alpha(L_train)) -
 E(|T_test| | |T_train|>alpha(T_train))$ suggests that LPC is superior to
 T on this data set.
@@ -130,9 +132,8 @@ pred.adv <-
 PredictiveAdvantage(x,y,type="survival",soft.thresh=lpc.obj$soft.thresh,
 censoring.status=cens)
 # Estimate FDRs for LPC scores and T scores
-fdr.lpc.out <-
-EstimateLPCFDR(x,y,
-type="survival",soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
+fdr.lpc.out <- EstimateLPCFDR(x,y,type="survival",
+soft.thresh=lpc.obj$soft.thresh,nreps=20,censoring.status=cens)
 # Estimate FDRs for T scores only. This is quicker than computing FDRs
 #    for LPC scores, and should be used when only T FDRs are needed. If we
 #    started with the same random seed, then EstimateTFDR and EstimateLPCFDR
