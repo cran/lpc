@@ -1,1 +1,10 @@
-export(LPC,PrintGeneList,EstimateLPCFDR,EstimateTFDR,PlotFDRs,print.lpcobj,print.lpcfdrobj, print.tfdrobj,PredictiveAdvantage)
+export(LPC, PrintGeneList, EstimateLPCFDR, EstimateTFDR, PlotFDRs,
+       print.lpcobj, print.lpcfdrobj, print.tfdrobj,
+       PredictiveAdvantage)
+
+S3method(print, lpcfdrobj)
+S3method(print, lpcobj)
+S3method(print, tfdrobj)
+
+importFrom("graphics", "legend", "par", "plot", "points")
+importFrom("stats", "lm", "quantile")
